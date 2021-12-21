@@ -4,5 +4,6 @@ press backspace to backspace tab. press space to add space on tab.
 
 to run: 
 make sure all files in same directory
-in terminal type "javac GuitarMain.java"
+in terminal, navigate to that directory
+type "javac GuitarMain.java"
 type "java GuitarMain"
