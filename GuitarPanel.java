@@ -105,6 +105,9 @@ public class GuitarPanel extends JPanel implements ActionListener, KeyListener
 			printStrings();
 		}
 		if(code == 16) {
+			if(!shift) {//so a space is added before adding simultaneous notes
+				appendBeat();
+			}
 			shift = true;
 		}
 	}
