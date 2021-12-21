@@ -403,7 +403,7 @@ public class GuitarPanel extends JPanel implements ActionListener, KeyListener
 				A+="-";
 			} if(lengthD<lengthE||lengthD<lengthA||lengthD<lengthG||lengthD<lengthB||lengthD<lengthe) {
 				D+="-";
-			} if(lengthG<lengthE||lengthG<lengthA||lengthG<lengthD||lengthA<lengthB||lengthA<lengthe) {
+			} if(lengthG<lengthE||lengthG<lengthA||lengthG<lengthD||lengthG<lengthB||lengthG<lengthe) {
 				G+="-";
 			} if(lengthB<lengthE||lengthB<lengthA||lengthB<lengthD||lengthB<lengthG||lengthB<lengthe) {
 				B+="-";
