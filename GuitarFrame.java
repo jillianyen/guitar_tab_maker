@@ -29,7 +29,7 @@ public class GuitarFrame extends JFrame
 		fretPanel2.setBounds(1235, 0, 130, 200); 
 		lPane.add(fretPanel2);
 		
-		panel2 = new MiscPanel(this); //the black buttons
+		panel2 = new MiscPanel(this); //the gray buttons
 		panel2.setOpaque(true);
 		lPane.add(panel2);//make keys pressed work
 		
