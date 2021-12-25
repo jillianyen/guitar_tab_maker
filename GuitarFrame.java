@@ -17,16 +17,16 @@ public class GuitarFrame extends JFrame
 	
 	GuitarFrame()
 	{ 
-		lPane.setBounds(0,0,1350,500);//right, down, width, height
+		lPane.setBounds(0,0,1400,500);//right, down, width, height
 		this.add(lPane); 
 		fretPanel = new FretPanel(this);
 		fretPanel.setOpaque(true);
-		fretPanel.setBounds(30,0,1300,200);
+		fretPanel.setBounds(30,0,1200,200);
 		lPane.add(fretPanel);
 		
 		fretPanel2 = new FretPanel2(this);
 		fretPanel2.setOpaque(true);
-		fretPanel2.setBounds(400, 230, 130, 200); 
+		fretPanel2.setBounds(1235, 0, 130, 200); 
 		lPane.add(fretPanel2);
 		
 		panel2 = new MiscPanel(this); //the black buttons
