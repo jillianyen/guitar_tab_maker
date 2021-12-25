@@ -4,17 +4,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-public class GuitarPanel extends JPanel implements ActionListener, KeyListener
+//contains main panel and fretboard buttons and actionlistener for those buttons
+public class FretPanel extends JPanel implements ActionListener
 {
+	JPanel sideButtons;
 	JButton[][] neckButtons;
 	GuitarFrame frame; 
-	JButton backspace;
-	JButton spaceButton;//eg append beat
-	boolean shift = false;
 	
 	String e = "e|--";
 	String B = "B|--";
@@ -23,24 +26,12 @@ public class GuitarPanel extends JPanel implements ActionListener, KeyListener
 	String A = "A|--";
 	String E = "E|--";
 	
-
-	
-	GuitarPanel(GuitarFrame frame)
+	FretPanel(GuitarFrame frame)
 	{
 		this.frame = frame;
 		setLayout(new GridLayout(6,20));
 		neckButtons = new JButton[6][20];
 		buildNeck();
-		backspace = new JButton();
-		backspace.setText("<-");
-		backspace.addActionListener(this);
-	//	add(backspace);
-		spaceButton = new JButton();
-		spaceButton.addActionListener(this);
-	//	add(spaceButton);
-		this.addKeyListener(this);
-		this.setFocusable(true);
-		this.setFocusTraversalKeysEnabled(false);
 		printStrings();
 	}
 	//make grid of buttons. each button represents a string and fret
@@ -82,7 +73,7 @@ public class GuitarPanel extends JPanel implements ActionListener, KeyListener
 		A += "-";
 		E += "-";
 	}
-	public void deleteBeat()
+	public void deleteBeat()//delete the very last char on each string
 	{
 		e = e.substring(0,e.length()-1);
 		B = B.substring(0,B.length()-1);
@@ -91,26 +82,68 @@ public class GuitarPanel extends JPanel implements ActionListener, KeyListener
 		A = A.substring(0,A.length()-1);
 		E = E.substring(0,E.length()-1);
 	}
-	@Override
-	public void keyPressed(KeyEvent e)
+	public void deleteNote()//delete end of every string until last note
 	{
-		//spacebar = 32. backspace = 8. shift = 16
-		int code = e.getKeyCode();
-		if(code == 32) {
-			appendBeat();
-			printStrings();
-		}
-		if(code == 8) {
-			deleteBeat();
-			printStrings();
-		}
-		if(code == 16) {
-			if(!shift) {//so a space is added before adding simultaneous notes
-				appendBeat();
-			}
-			shift = true;
-		}
+		reverseAll();
+		int smallest;
+		int ei = firstNumIndex(e);
+		int Bi = firstNumIndex(B);
+		int Gi = firstNumIndex(G);
+		int Di = firstNumIndex(D);
+		int Ai = firstNumIndex(A);
+		int Ei = firstNumIndex(E);
+		smallest = smallesti(ei,Bi,Gi, Di,Ai,Ei);
+		reverseAll();
+		deleteUntilSmallest(smallest);
 	}
+	//only used in reverseAll
+	public String reverse(String string)
+	{
+		char ch;
+		String reversedString = "";
+		for (int i=0; i<string.length(); i++) {
+			ch = string.charAt(i);
+			reversedString = ch+reversedString;
+	    }
+		return reversedString;
+	}
+	public void reverseAll()
+	{
+		e = reverse(e);
+		B = reverse(B);
+		G = reverse(G);
+		D = reverse(D);
+		A = reverse(A);
+		E = reverse(E);
+	}
+	public int firstNumIndex(String str)
+	{
+		int count = 1; 
+		for(int i = 0; i<str.length();i++) {
+			if(str.charAt(i) == '-') {
+				count++;
+			} else {
+				break;
+			}
+		}
+		return count;
+	}
+	public int smallesti(int e, int B, int G, int D, int A, int E)
+	{
+		int[] temp = {e,B,G,D,A,E};
+		Arrays.sort(temp);
+		return temp[0];
+	}
+	public void deleteUntilSmallest(int i)
+	{
+		e = e.substring(0,e.length()-i);
+		B = B.substring(0,B.length()-i);
+		G = G.substring(0,G.length()-i);
+		D = D.substring(0,D.length()-i);
+		A = A.substring(0,A.length()-i);
+		E = E.substring(0,E.length()-i);
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent ev)
 	{
@@ -127,9 +160,9 @@ public class GuitarPanel extends JPanel implements ActionListener, KeyListener
 			{
 				if(ev.getSource() == neckButtons[i][j])
 				{
-					if(shift==true)//adding notes to different strings on the same beat (eg for chords)
+					if(frame.getMiscPanel().getShift() == true)//doing chords or simultaneous notes
 					{
-						if(i==0) 
+						if(i==0)
 						{
 							//if last two elements in string are hyphens
 							if(e.charAt(laste)=='-'&&e.charAt(laste-1)=='-') {
@@ -145,7 +178,6 @@ public class GuitarPanel extends JPanel implements ActionListener, KeyListener
 								e = e.substring(0,e.length()-1)+j;
 								printStrings();
 							}
-							
 						}
 						if(i==1) 
 						{
@@ -233,7 +265,7 @@ public class GuitarPanel extends JPanel implements ActionListener, KeyListener
 							}
 						}
 					}
-					else //adding indiv notes on separate beats (eg arpeggio)
+					else //arpeggio
 					{
 						if(i==0) 
 						{
@@ -371,48 +403,79 @@ public class GuitarPanel extends JPanel implements ActionListener, KeyListener
 				}
 			}
 		}
-		
-		if(ev.getSource() == backspace)
-		{
-			deleteBeat();
-			printStrings();
-		}
-		if(ev.getSource() == spaceButton)
-		{
-			appendBeat();
-			printStrings();
-		}
 	}
-	@Override
-	public void keyTyped(KeyEvent e){}
-	
-	@Override
-	public void keyReleased(KeyEvent ev) 
+	public void lastChare(String sym)
 	{
-		int lengthe = e.length();
-		int lengthB = B.length();
-		int lengthG = G.length();
-		int lengthD = D.length();
-		int lengthA = A.length();
-		int lengthE = E.length();
-		int code = ev.getKeyCode();
-		if(code==16) {
-			shift = false;
-			if(lengthe<lengthE||lengthe<lengthA||lengthe<lengthD||lengthe<lengthG||lengthe<lengthB) {
-				e+="-";
-			} if(lengthE<lengthA||lengthE<lengthD||lengthE<lengthG||lengthE<lengthB||lengthE<lengthe) {
-				E+="-";
-			} if(lengthA<lengthE||lengthA<lengthD||lengthA<lengthG||lengthA<lengthB||lengthA<lengthe) {
-				A+="-";
-			} if(lengthD<lengthE||lengthD<lengthA||lengthD<lengthG||lengthD<lengthB||lengthD<lengthe) {
-				D+="-";
-			} if(lengthG<lengthE||lengthG<lengthA||lengthG<lengthD||lengthG<lengthB||lengthG<lengthe) {
-				G+="-";
-			} if(lengthB<lengthE||lengthB<lengthA||lengthB<lengthD||lengthB<lengthG||lengthB<lengthe) {
-				B+="-";
-			}
-			appendBeat();
-			printStrings();
-		}
+		e=e.substring(0,e.length()-1)+sym;
+	}
+	public void lastCharB(String sym)
+	{
+		B=B.substring(0,B.length()-1)+sym;
+	}
+	public void lastCharG(String sym)
+	{
+		G=G.substring(0,G.length()-1)+sym;
+	}
+	public void lastCharD(String sym)
+	{
+		D=D.substring(0,D.length()-1)+sym;
+	}
+	public void lastCharA(String sym)
+	{
+		A=A.substring(0,A.length()-1)+sym;
+	}
+	public void lastCharE(String sym)
+	{
+		E=E.substring(0,E.length()-1)+sym;
+	}
+	
+	public void addOnee()
+	{
+		e+="-";
+	}
+	public void addOneB()
+	{
+		B+="-";
+	}
+	public void addOneG()
+	{
+		G+="-";
+	}
+	public void addOneD()
+	{
+		D+="-";
+	}
+	public void addOneA()
+	{
+		A+="-";
+	}
+	public void addOneE()
+	{
+		E+="-";
+	}
+	
+	public String gete()
+	{
+		return e;
+	}
+	public String getB()
+	{
+		return e;
+	}
+	public String getG()
+	{
+		return G;
+	}
+	public String getD()
+	{
+		return D;
+	}
+	public String getA()
+	{
+		return A;
+	}
+	public String getE()
+	{
+		return E;
 	}
 }
