@@ -5,8 +5,8 @@ Hold shift while clicking buttons to tab simultaneous notes. Pressing shift also
 to run: 
 make sure all files in same directory
 in terminal, navigate to that directory
-type "javac GuitarMain.java"
-type "java GuitarMain"
+type "javac G2Main.java"
+type "java G2Main"
 
 example tab created "queen bee" by taj mahal
 e|-----3------0---------0-------------------------------0-------------------
