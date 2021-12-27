@@ -1,7 +1,7 @@
-public class GuitarMain
+public class G2Main
 {
 	public static void main(String[] args)
 	{
-		new GuitarFrame();
+		new G2Frame();
 	}
 }
