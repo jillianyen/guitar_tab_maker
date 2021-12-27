@@ -5,112 +5,105 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-//panel with slide hammer pull buttons
-public class FretPanel2 extends JPanel implements ActionListener
+//panel with main fretboard buttons
+public class FretPanel extends JPanel implements ActionListener
 {
-
+	JButton[][] neckButtons;
 	G2Frame frame;
-	JButton[][] buttons;
 	
-	FretPanel2(G2Frame frame)
+	FretPanel(G2Frame frame)
 	{
 		this.frame = frame;
-		setLayout(new GridLayout(6,3));
-		buttons = new JButton[6][3];
-		buildButtons();
+		setLayout(new GridLayout(6,20));
+		neckButtons = new JButton[6][20];
+		buildNeck();
 	}
-	public void buildButtons()
+	public void buildNeck()
 	{
-		for(int i = 0; i < buttons.length; i++) {
-			for(int j = 0; j < buttons[i].length; j++) {
-				buttons[i][j] = new JButton();
-				buttons[i][j].addActionListener(this);
-				buttons[i][j].setFocusable(false);
-				buttons[i][j].setBackground(new Color(92,66,47));//brown
-				buttons[i][j].setForeground(new Color(245,235,193));//yellow
-				add(buttons[i][j]);
-				if(j==0) {
-					buttons[i][j].setText("/");
+		for(int i = 0; i < neckButtons.length; i++) {
+			for(int j = 0; j < neckButtons[i].length; j++) {
+				neckButtons[i][j] = new JButton();
+				neckButtons[i][j].addActionListener(this);
+				neckButtons[i][j].setFocusable(false);
+				neckButtons[i][j].setBackground(new Color(92,66,47));//brown for background
+				neckButtons[i][j].setForeground(new Color(245,235,193));//yellow for numbers text
+				neckButtons[i][j].setText(""+j);
+				//adding fret board colors
+				if((i==1||i==2||i==3||i==4)&&(j==3||j==5||j==7||j==9||j==12||j==15||j==17)) {
+					neckButtons[i][j].setBackground(Color.lightGray);
+					neckButtons[i][j].setForeground(new Color(70,70,70));
 				}
-				if(j==1) {
-					buttons[i][j].setText("h");
-				}
-				if(j==2) {
-					buttons[i][j].setText("p");
-				}
+				add(neckButtons[i][j]);
 			}
 		}
 	}
 	@Override
-	public void actionPerformed(ActionEvent ev)
+	public void actionPerformed(ActionEvent e)
 	{
-		for(int i = 0; i < buttons.length; i++) {
-			for(int j = 0; j < buttons[i].length; j++) {
-				if(ev.getSource() == buttons[i][j]) {
-					if(i==0) {//e-----------
-						if(j==0) {
-							frame.getConfig().lastChare("/");
+		for(int i = 0; i < neckButtons.length; i++) {
+			for(int j = 0; j < neckButtons[i].length; j++) {
+				if(e.getSource() == neckButtons[i][j]) {
+					if(frame.getUI().getShift()==false) {
+						if(i==0) {
+							if(j>9) {//add note at fret j to e string
+								frame.getConfig().addeNote(1, j);
+							}else {
+								frame.getConfig().addeNote(2, j);
+							}
 						}
-						if(j==1) {
-							frame.getConfig().lastChare("h");
+						if(i==1) {//add note at fret j to B string
+							if(j>9) {
+								frame.getConfig().addBNote(1, j);
+							}else {
+								frame.getConfig().addBNote(2, j);
+							}				
 						}
-						if(j==2) {
-							frame.getConfig().lastChare("p");
+						if(i==2) {//add note at fret j to G string
+							if(j>9) {
+								frame.getConfig().addGNote(1, j);
+							}else {
+								frame.getConfig().addGNote(2, j);
+							}
 						}
-					}
-					if(i==1) {//B-----------
-						if(j==0) {
-							frame.getConfig().lastCharB("/");
+						if(i==3) {//add note at fret j to D strign
+							if(j>9) {
+								frame.getConfig().addDNote(1, j);
+							}else {
+								frame.getConfig().addDNote(2, j);
+							}
 						}
-						if(j==1) {
-							frame.getConfig().lastCharB("h");
+						if(i==4) {//add note at fret j to A string
+							if(j>9) {
+								frame.getConfig().addANote(1, j);
+							}else {
+								frame.getConfig().addANote(2, j);
+							}
 						}
-						if(j==2) {
-							frame.getConfig().lastCharB("p");
+						if(i==5) {//add note at fret j to E string
+							if(j>9) {
+								frame.getConfig().addENote(1, j);
+							}else {
+								frame.getConfig().addENote(2, j);
+							}
 						}
-					}
-					if(i==2) {//G-----------
-						if(j==0) {
-							frame.getConfig().lastCharG("/");
+					} else {
+						if(i==0) {
+							frame.getConfig().eshift(j);
 						}
-						if(j==1) {
-							frame.getConfig().lastCharG("h");
+						if(i==1) {
+							frame.getConfig().Bshift(j);
 						}
-						if(j==2) {
-							frame.getConfig().lastCharG("p");
+						if(i==2) {
+							frame.getConfig().Gshift(j);
 						}
-					}
-					if(i==3) {//D-----------
-						if(j==0) {
-							frame.getConfig().lastCharD("/");
+						if(i==3) {
+							frame.getConfig().Dshift(j);
 						}
-						if(j==1) {
-							frame.getConfig().lastCharD("h");
+						if(i==4) {
+							frame.getConfig().Ashift(j);
 						}
-						if(j==2) {
-							frame.getConfig().lastCharD("p");
-						}
-					}
-					if(i==4) {//A-----------
-						if(j==0) {
-							frame.getConfig().lastCharA("/");
-						}
-						if(j==1) {
-							frame.getConfig().lastCharA("h");
-						}
-						if(j==2) {
-							frame.getConfig().lastCharA("p");
-						}
-					}
-					if(i==5) {//E-----------
-						if(j==0) {
-							frame.getConfig().lastCharE("/");
-						}
-						if(j==1) {
-							frame.getConfig().lastCharE("h");
-						}
-						if(j==2) {
-							frame.getConfig().lastCharE("p");
+						if(i==5) {
+							frame.getConfig().Eshift(j);
 						}
 					}
 				}
