@@ -2,24 +2,23 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-//panel that contains the "/,h,p" buttons
+//panel with slide hammer pull buttons
 public class FretPanel2 extends JPanel implements ActionListener
 {
-	GuitarFrame frame;
+
+	G2Frame frame;
 	JButton[][] buttons;
 	
-	FretPanel2(GuitarFrame frame)
+	FretPanel2(G2Frame frame)
 	{
 		this.frame = frame;
 		setLayout(new GridLayout(6,3));
 		buttons = new JButton[6][3];
 		buildButtons();
 	}
-
 	public void buildButtons()
 	{
 		for(int i = 0; i < buttons.length; i++) {
@@ -45,100 +44,73 @@ public class FretPanel2 extends JPanel implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent ev)
 	{
-		for(int i = 0; i < buttons.length; i++) 
-		{
-			for(int j = 0; j < buttons[i].length; j++) 
-			{
-				if(ev.getSource() == buttons[i][j])
-				{
-					if(i==0) 
-					{
+		for(int i = 0; i < buttons.length; i++) {
+			for(int j = 0; j < buttons[i].length; j++) {
+				if(ev.getSource() == buttons[i][j]) {
+					if(i==0) {//e-----------
 						if(j==0) {
-							frame.getFretPanel().lastChare("/");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastChare("/");
 						}
 						if(j==1) {
-							frame.getFretPanel().lastChare("h");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastChare("h");
 						}
 						if(j==2) {
-							frame.getFretPanel().lastChare("p");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastChare("p");
 						}
 					}
-					if(i==1) 
-					{
+					if(i==1) {//B-----------
 						if(j==0) {
-							frame.getFretPanel().lastCharB("/");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharB("/");
 						}
 						if(j==1) {
-							frame.getFretPanel().lastCharB("h");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharB("h");
 						}
 						if(j==2) {
-							frame.getFretPanel().lastCharB("p");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharB("p");
 						}
 					}
-					if(i==2) 
-					{
+					if(i==2) {//G-----------
 						if(j==0) {
-							frame.getFretPanel().lastCharG("/");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharG("/");
 						}
 						if(j==1) {
-							frame.getFretPanel().lastCharG("h");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharG("h");
 						}
 						if(j==2) {
-							frame.getFretPanel().lastCharG("p");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharG("p");
 						}
 					}
-					if(i==3) 
-					{
+					if(i==3) {//D-----------
 						if(j==0) {
-							frame.getFretPanel().lastCharD("/");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharD("/");
 						}
 						if(j==1) {
-							frame.getFretPanel().lastCharD("h");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharD("h");
 						}
 						if(j==2) {
-							frame.getFretPanel().lastCharD("p");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharD("p");
 						}
 					}
-					if(i==4) 
-					{
+					if(i==4) {//A-----------
 						if(j==0) {
-							frame.getFretPanel().lastCharA("/");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharA("/");
 						}
 						if(j==1) {
-							frame.getFretPanel().lastCharA("h");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharA("h");
 						}
 						if(j==2) {
-							frame.getFretPanel().lastCharA("p");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharA("p");
 						}
 					}
-					if(i==5) 
-					{
+					if(i==5) {//E-----------
 						if(j==0) {
-							frame.getFretPanel().lastCharE("/");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharE("/");
 						}
 						if(j==1) {
-							frame.getFretPanel().lastCharE("h");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharE("h");
 						}
 						if(j==2) {
-							frame.getFretPanel().lastCharE("p");
-							frame.getFretPanel().printStrings();
+							frame.getConfig().lastCharE("p");
 						}
 					}
 				}
